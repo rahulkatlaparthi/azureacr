@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: one
+
+spec:
+
+  selector:
+
+    matchLabels:
+
+      app: one
+
+  replicas: 2 # Update the replicas from 2 to 4
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: one
+
+    spec:
+
+      containers:
+
+      - name: one
+
+        image: testacrspring.azurecr.io/spring-boot-hello-world.git.wiharo3046:652
+
+
+        ports:
+
+        - containerPort: 8080
+---
+# https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: one
+spec:
+  selector:
+    app: one
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+ 
